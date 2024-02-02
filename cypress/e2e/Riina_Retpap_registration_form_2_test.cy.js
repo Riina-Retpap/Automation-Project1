@@ -294,7 +294,7 @@ describe('Section 2: Visual tests', () => {
 
     })
 
-    it.only('Animal dropdown is correct', () => {
+    it('Animal dropdown is correct', () => {
         cy.get('#animal').select(1).screenshot('animal drop-down')
         cy.get('#animal').children().should('have.length', 6)
         cy.get('#animal').find('option').eq(0).should('have.text', 'Dog')
