@@ -95,32 +95,45 @@ describe('This is first test suite, Riina Retpap', () => {
     /*
     Assignment 3: add the content to the following tests
     */
-
+    
     it('User cannot submit data when phone number is absent', () => {
         // Add test, similar to previous one with phone number field not filled in
         // All other fields should be entered correctly
         // Assert that submit button is not enabled and that successful message is not visible
-        
+
         cy.get('#username').type('Chandler')
         cy.get('[name="password"]').type('EarthAndM00n')
         cy.get('[name="confirm"]').type('EarthAndM00n')
+        cy.get('h2').contains('Password').click()
         cy.get('.submit_button').should('not.be.enabled')
         cy.get('#success_message').should('not.be.visible')
 
     })
 
-    it('User cannot submit data when password and/or confirmation password is absent', () => {
+    it('User cannot submit data when password is absent', () => {
         // Add test, similar to previous one with password field not filled in
         // All other fields should be entered correctly
         // Assert that submit button is not enabled and that successful message is not visible
         cy.get('#username').type('Chandler')
         cy.get('#phoneNumber').type('567895678')
         cy.get('[name="confirm"]').type('EarthAndM00n')
+        cy.get('h2').contains('Password').click()
         cy.get('.submit_button').should('not.be.enabled')
         cy.get('#success_message').should('not.be.visible')
 
     })
+    it('User cannot submit data when confirmation password is absent', () => {
+        // Add test, similar to previous one with password field not filled in
+        // All other fields should be entered correctly
+        // Assert that submit button is not enabled and that successful message is not visible
+        cy.get('#username').type('Chandler')
+        cy.get('#phoneNumber').type('567895678')
+        cy.get('[name="password"]').type('EarthAndM00n')
+        cy.get('h2').contains('Password').click()
+        cy.get('.submit_button').should('not.be.enabled')
+        cy.get('#success_message').should('not.be.visible')
 
+    })
     it('User cannot add letters to phone number', () => {
         // Next verification is given as example
         // how we can check from html code, that phone number should contain only numbers
@@ -129,6 +142,7 @@ describe('This is first test suite, Riina Retpap', () => {
         cy.get('#phoneNumber').type('Abba')
         cy.get('[name="password"]').type('EarthAndM00n')
         cy.get('[name="confirm"]').type('EarthAndM00n')
+        cy.get('h2').contains('Password').click()
         cy.get('.submit_button').should('not.be.enabled')
         cy.get('#success_message').should('not.be.visible')
         // Add steps, when all fields are correctly filled in, except phone number
