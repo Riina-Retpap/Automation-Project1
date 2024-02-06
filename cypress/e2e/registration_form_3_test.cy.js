@@ -14,7 +14,25 @@ Task list:
     * checkboxes, their content and links
     * email format
  */
+describe(' Visual tests', () => {
+    it('Check that radio button list for getting lewsletter is correct', () => {
+        // Array of found elements with given selector has 4 elements in total
+        cy.get('input[type="radio"]').should('have.length', 4)
+        // Verify labels of the radio buttons
+        cy.get('input[type="radio"]').next().eq(0).should('have.text', 'Daily')
+        cy.get('input[type="radio"]').next().eq(1).should('have.text', 'Weekly')
+        cy.get('input[type="radio"]').next().eq(2).should('have.text', 'Monthly')
+        cy.get('input[type="radio"]').next().eq(3).should('have.text', 'Never')
+    })
+    it('Country dropdown is correct', () => {
+        cy.get('#country').children().should('have.length', 4)
+        cy.get('#country').select('Estonia')
 
+
+    })
+})
+
+   
 
 /*
 BONUS TASK: add functional tests for registration form 3
