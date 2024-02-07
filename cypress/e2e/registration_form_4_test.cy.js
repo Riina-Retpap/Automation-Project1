@@ -40,7 +40,7 @@ describe('Input fields', () => {
         // input invalid email
         // check that email element has red border outline
         // submit button should not be active
-        cy.get('#email').should('have.attr', 'pattern').should('contain', '[a-z0-9]+@[a-z0-9]')
+        cy.get('#email').should('have.attr', 'pattern').should('contain', '[a-z0-9]+@[a-z0-9]+\\.[a-z]{2,4}$')
         cy.get('#email').type('invalid')
         cy.get('h2').contains('Password').click()
         cy.get('#email').should('have.css', 'box-shadow').should('contain', 'rgb(255, 0, 0)')
@@ -54,7 +54,7 @@ describe('Input fields', () => {
     })
 
     it('BMW should not be listed in the list of the cars', () => {
-        
+
         // Check list size is 4
         cy.get('#cars').children().should('have.length', 4)
 

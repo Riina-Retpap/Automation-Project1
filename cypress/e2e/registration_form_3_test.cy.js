@@ -16,23 +16,72 @@ Task list:
  */
 describe(' Visual tests', () => {
     it('Check that radio button list for getting lewsletter is correct', () => {
-        // Array of found elements with given selector has 4 elements in total
         cy.get('input[type="radio"]').should('have.length', 4)
-        // Verify labels of the radio buttons
         cy.get('input[type="radio"]').next().eq(0).should('have.text', 'Daily')
         cy.get('input[type="radio"]').next().eq(1).should('have.text', 'Weekly')
         cy.get('input[type="radio"]').next().eq(2).should('have.text', 'Monthly')
         cy.get('input[type="radio"]').next().eq(3).should('have.text', 'Never')
     })
-    it('Country dropdown is correct', () => {
+    it('Check that Country dropdown is correct', () => {
         cy.get('#country').children().should('have.length', 4)
+        cy.get('#country').find('option').eq(0).should('have.text', '')
+        cy.get('#country').find('option').eq(1).should('have.text', 'Spain')
+        cy.get('#country').find('option').eq(2).should('have.text', 'Estonia')
+        cy.get('#country').find('option').eq(3).should('have.text', 'Austria')
+    })
+    it('Check that Spain - city dropdown is correct', () => {
+        cy.get('#country').select('Spain')
+        cy.get('#city').children().should('have.length', 5)
+        cy.get('#city').find('option').eq(0).should('have.text', '')
+        cy.get('#city').find('option').eq(1).should('have.text', 'Malaga')
+        cy.get('#city').find('option').eq(2).should('have.text', 'Madrid')
+        cy.get('#city').find('option').eq(3).should('have.text', 'Valencia')
+        cy.get('#city').find('option').eq(4).should('have.text', 'Corralejo')
+    })
+
+    it('Check Estonia - city array', () => {
         cy.get('#country').select('Estonia')
+        cy.get('#city').find('option').then(options => {
+            const actual = [...options].map(option => option.value)
+            expect(actual).to.deep.eq(['', 'string:Tallinn', 'string:Haapsalu', 'string:Tartu',])
+        })
+    })
 
+    it('Check Austria - city array', () => {
+        cy.get('#country').select('Austria')
+        cy.get('#city').find('option').then(options => {
+            const actual = [...options].map(option => option.value)
+            expect(actual).to.deep.eq(['', 'string:Vienna', 'string:Salzburg', 'string:Innsbruck',])
+        })
+    })
 
+    it('Check that chosen city is removed when country is changed', () => {
+        cy.get('#country').select('Austria')
+        cy.get('#city').select('Vienna')
+        cy.get('#country').select('Spain')
+        cy.get('#city').find('option').then(options => {
+            const actual = [...options].map(option => option.value)
+            expect(actual).to.deep.eq(['', 'string:Malaga', 'string:Madrid', 'string:Valencia', 'string:Corralejo'])
+        })
+    })
+
+    it('Check that cookiePolicy link works', () => {
+        cy.get('button').children().eq(0).should('be.visible')
+            .and('have.attr', 'href', 'cookiePolicy.html')
+            .click()
+        cy.url().should('contain', '/cookiePolicy.html')
+        cy.go('back')
+        cy.log('Back again in registration form 3')
+    })
+
+    it('Check that check boxes are correct', () => {
+        cy.get('input[type="checkbox"]').should('have.length', 2)
+        cy.get('input[type="checkbox"]').next().eq(0).should('have.text', '')
+        cy.get('input[type="checkbox"]').next().eq(1).should('have.text', 'Accept our cookie policy')
     })
 })
 
-   
+
 
 /*
 BONUS TASK: add functional tests for registration form 3
