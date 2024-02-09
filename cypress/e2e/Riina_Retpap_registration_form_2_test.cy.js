@@ -173,6 +173,7 @@ describe('Section 2: Visual tests', () => {
     })
 })
 
+
 function inputValidData(username) {
     cy.log('Username will be filled')
     cy.get('input[data-testid="user"]').type(username)
@@ -201,6 +202,11 @@ describe('For learning purposes', () => {
         cy.get('#cars').find('option').then(options => {
             const actual = [...options].map(option => option.value)
             expect(actual).to.deep.eq(['volvo', 'saab', 'opel', 'audi'])
+        })
+
+        cy.get('#animal').find('option').then(options => {
+            const actual = [...options].map(option => option.text)
+            expect(actual).to.deep.eq(['Dog', 'Cat', 'Snake', 'Hippo', 'Cow', 'Horse'])
         })
     })
 })

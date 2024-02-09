@@ -15,6 +15,7 @@ Task list:
     * email format
  */
 describe(' Visual tests', () => {
+    
     it('Check that radio button list for getting lewsletter is correct', () => {
         cy.get('input[type="radio"]').should('have.length', 4)
         cy.get('input[type="radio"]').next().eq(0).should('have.text', 'Daily')
@@ -22,6 +23,7 @@ describe(' Visual tests', () => {
         cy.get('input[type="radio"]').next().eq(2).should('have.text', 'Monthly')
         cy.get('input[type="radio"]').next().eq(3).should('have.text', 'Never')
     })
+
     it('Check that Country dropdown is correct', () => {
         cy.get('#country').children().should('have.length', 4)
         cy.get('#country').find('option').eq(0).should('have.text', '')
@@ -29,6 +31,7 @@ describe(' Visual tests', () => {
         cy.get('#country').find('option').eq(2).should('have.text', 'Estonia')
         cy.get('#country').find('option').eq(3).should('have.text', 'Austria')
     })
+
     it('Check that Spain - city dropdown is correct', () => {
         cy.get('#country').select('Spain')
         cy.get('#city').children().should('have.length', 5)
@@ -81,7 +84,41 @@ describe(' Visual tests', () => {
     })
 })
 
+describe(' Functional tests', () => {
+    it('User can submit query with all fields added', () => {
+        inputValidData('Wooden@Shoes.ee')
+        cy.get('#name').type('Mona')
+        cy.get('[type="date"]').eq(0).type('2023-01-02')
+        cy.get('#birthday').type('1999-01-02')
+        cy.get('input[type="radio"]').eq(1).check().should('be.checked').should('have.value', 'Weekly')
+        cy.get('[type="submit"]').should('be.enabled')
+        cy.get('[type="submit"]').eq(1).click()
+        cy.get('h1').contains('Submission received')
+    })
+    it('User can submit query with mandatory fields added', () => {
+        inputValidData('Wooden@Shoes.ee')
+        cy.get('[type="submit"]').should('be.enabled')
+        cy.get('[type="submit"]').eq(1).click()
+        cy.get('h1').contains('Submission received')
+    })
+    it('User can not submit query without country', () => {
+        inputValidData('Wooden@Shoes.ee')
+        cy.get('#country').scrollIntoView()
+        cy.get('#country').select('')
+        cy.get('h2').contains('Birthday').click()
+        cy.get('[type="submit"]').eq(1).should('not.be.enabled')
+    })
+})
 
+function inputValidData(email) {
+    cy.log('email will be filled')
+    cy.get('[name="email"]').type(email)
+    cy.get('#country').select('Austria')
+    cy.get('#city').select('Vienna')
+    cy.get('input[type="checkbox"]').eq(0).should('have.text', '').check().should('be.checked')
+    cy.get('input[type="checkbox"]').eq(1).should('have.text', '').check().should('be.checked')
+    cy.get('h2').contains('Birthday').click()
+}
 
 /*
 BONUS TASK: add functional tests for registration form 3
